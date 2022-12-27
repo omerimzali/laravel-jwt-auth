@@ -55,7 +55,7 @@ class AuthController extends Controller
 
         if ($validator->fails()) {
    
-                return response()->json(['status'=>'failed','message'=> 'User not created.'],500);
+                return response()->json(['status'=>'failed','message'=> 'User not created.'],5git s00);
        
         }
 
