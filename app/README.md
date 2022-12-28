@@ -13,6 +13,8 @@ After installation steps you can use the app with `php artisan serve` command
 ## Verification
  Once a user created, It has not email validation so you should run `php artisan update:email-verify email@email.com` command
 
+## Docker
+- Unfortunately, I did not have a chance to try dockerfile because mysql does not have an arm version. But I've create a proper .dockerfile and docker-compose.yaml
 
 ## Endpoints
 
