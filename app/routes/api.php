@@ -3,7 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\TodoController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,15 +16,19 @@ use App\Http\Controllers\TodoController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
-
 
 Route::controller(AuthController::class)->group(function () {
-    Route::post('login', 'login');
+    Route::post('login', 'login')->name('login');
     Route::post('register', 'register');
     Route::post('logout', 'logout');
+    Route::any('unauthorized','unauthorized')->name('unauthorized');
     Route::post('refresh', 'refresh');
 });
+
+
+Route::controller(UserController::class)->group(function () {
+    Route::patch('/me/email', 'updateEmail');
+    Route::patch('/me', 'update');
+});
+
+
