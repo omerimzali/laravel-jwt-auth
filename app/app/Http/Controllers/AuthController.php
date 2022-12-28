@@ -12,7 +12,7 @@ class AuthController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login','register']]);
+        $this->middleware('auth:api', ['except' => ['login','register','unauthorized']]);
     }
 
     public function login(Request $request)
@@ -25,13 +25,20 @@ class AuthController extends Controller
 
         $token = Auth::attempt($credentials);
         if (!$token) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Unauthorized',
-            ], 401);
+            
+            return $this->unauthorized($request);
+       
         }
 
         $user = Auth::user();
+        if(!$user->email_verified_at){
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Email should verify.',
+            ], 401);
+        }else{
+
+      
         return response()->json([
                 'status' => 'success',
                 'user' => $user,
@@ -40,6 +47,7 @@ class AuthController extends Controller
                     'type' => 'bearer',
                 ]
             ]);
+        }
 
     }
 
@@ -54,9 +62,7 @@ class AuthController extends Controller
       
 
         if ($validator->fails()) {
-   
                 return response()->json(['status'=>'failed','message'=> 'User not created.'],500);
-       
         }
 
         $user = User::create([
@@ -64,9 +70,8 @@ class AuthController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
+        
         if ($user){
-
-       
         $token = Auth::login($user);
         return response()->json([
             'status' => 'success',
@@ -77,8 +82,8 @@ class AuthController extends Controller
                 'type' => 'bearer',
             ]
         ]);
-
         }
+
     }
 
     public function logout()
@@ -100,6 +105,13 @@ class AuthController extends Controller
                 'type' => 'bearer',
             ]
         ]);
+    }
+
+    public function unauthorized(Request $request){
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Unauthorized',
+        ], 401);
     }
 
 }
