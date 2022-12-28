@@ -9,3 +9,15 @@
 
 
 After installation steps you can use the app with `php artisan serve` command
+
+
+## Endpoints
+
+### /api/register
+
+### /api/login
+
+
+### api/me/
+
+### api/me/email
